@@ -6,6 +6,6 @@ First case:
 - Enable "SuccessSystemsOrder_Spawner" and hit play. As result you will be see cloud of 1000 cubes. Theese cubes won't move, because "ModifySpeedSystem" multiply 100f by 0f and get 0f as result.
 
 Second case:
-- Enable "IgnoreSystemsOrder_Spawner" and hit play. As result you will be see cloud of 100000 cubes. Theese cubes will be move!
+- Enable "IgnoreSystemsOrder_Spawner" and hit play. As result you will be see cloud of 100000 cubes. Theese cubes will be move, that marks the "ModifySpeedSystem" doesn't work correct.
 
-As i understand, when CPU get high loads the systems execution order or Jobs dependency not respects.
+As i understand, when CPU get high loads the systems execution order or Jobs dependency for some reason not respects.
