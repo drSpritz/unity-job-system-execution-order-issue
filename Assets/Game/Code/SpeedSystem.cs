@@ -14,21 +14,22 @@ public struct Speed : IComponentData
 }
 
 [UpdateBefore(typeof(MoveForwardSystem))]
-public class SpeedSystem : JobComponentSystem
+public class SpeedSystem : ComponentSystem
 {
-    const int BATCH = 4;
-
-    protected override JobHandle OnUpdate(JobHandle inputDeps)
+    public struct Data
     {
-        return new Job().Schedule(this, BATCH, inputDeps);
+        [ReadOnly] public int Length;
+        public ComponentDataArray<MoveSpeed> moveSpeed;
+        [ReadOnly] public ComponentDataArray<Speed> speed;
     }
 
-    [BurstCompile]
-    struct Job : IJobProcessComponentData<MoveSpeed, Speed>
+    [Inject] Data m_data;
+
+    protected override void OnUpdate()
     {
-        public void Execute([ReadOnly] ref MoveSpeed moveSpeed, [ReadOnly] ref Speed speed)
+        for (int i = 0; i < m_data.Length; i++)
         {
-            moveSpeed.speed = speed.Value;
+            m_data.moveSpeed[i] = new MoveSpeed() { speed = m_data.speed[i].Value };
         }
     }
 }
