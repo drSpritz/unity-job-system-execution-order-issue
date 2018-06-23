@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-	public int instancesCount;
+    public int instancesCount;
     public Mesh mesh;
     public Material mat;
 
@@ -21,19 +21,15 @@ public class Spawner : MonoBehaviour
         EntityManager manager = World.Active.GetOrCreateManager<EntityManager>();
 
         EntityArchetype archetype = manager.CreateArchetype(
-            ComponentType.Create<MeshInstanceRenderer>(),
             ComponentType.Create<TransformMatrix>(),
+            ComponentType.Create<TransformLocalMatrix>(),
+            ComponentType.Create<PhysicBodyLocalVelocity>(),
+            ComponentType.Create<PhysicBodyVelocity>(),
             ComponentType.Create<Position>(),
-            ComponentType.Create<Rotation>(),
-            ComponentType.Create<MoveForward>(),
-            ComponentType.Create<MoveSpeed>(),
-            ComponentType.Create<Speed>(),
-            ComponentType.Create<ModifySpeed>()
+            ComponentType.Create<Rotation>()
             );
 
         Entity entity = manager.CreateEntity(archetype);
-
-        manager.SetSharedComponentData(entity, new MeshInstanceRenderer() { mesh = mesh, material = mat });
 
         var instances = new NativeArray<Entity>(instancesCount, Allocator.Temp);
         manager.Instantiate(entity, instances);
@@ -45,8 +41,7 @@ public class Spawner : MonoBehaviour
         {
             manager.SetComponentData(e, new Position() { Value = initialPosition + Random.onUnitSphere * Random.Range(0f, 100f) });
             manager.SetComponentData(e, new Rotation() { Value = Random.rotation });
-            manager.SetComponentData(e, new Speed() { Value = 100f });
-            manager.SetComponentData(e, new ModifySpeed() { Value = 0f });
+            manager.SetComponentData(e, new PhysicBodyVelocity() { Value = Random.onUnitSphere * Random.Range(0f, 100f) });
         }
 
         instances.Dispose();
